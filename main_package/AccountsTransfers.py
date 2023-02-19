@@ -11,4 +11,3 @@ class AccountsTransfers:
 
     def process_array(self, array):
         pass
-    
