@@ -21,5 +21,5 @@ def hide_account_sender(account):
     pass
 
 
-def print_results():
+def print_results(data: list):
     pass

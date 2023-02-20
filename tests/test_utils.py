@@ -1,34 +1,121 @@
 import pytest
+from main_package import utils
 
 
 @pytest.fixture
 def testing_processed_array():
-    return {}
+    """
+    Фикстура возвращает обработанный с помощью методов класса AccountsTransfers массив, в виде словаря.
+    Где keys - даты транзакций,
+    values - необходимые для итогового вывода значения (description, from, to, amount, currency).
+    """
+    return {
+        "2019-08-26T10:50:58.294041":
+            ["Перевод организации", "Maestro 1596837868705199", "Счет 64686473678894779589", "31957.58", "руб."],
+        "2019-07-03T18:35:29.512364":
+            ["Перевод организации", "MasterCard 7158300734726758", "MasterCard 7158300734726758", "8221.37", "USD"],
+        "2018-06-30T02:08:58.425572":
+            ["Перевод организации", "Счет 75106830613657916952", "Счет 11776614605963066702", "9824.07", "USD"],
+        "2019-03-23T01:09:46.296404":
+            ["Перевод со счета на счет", "Счет 44812258784861134719", "Счет 74489636417521191160", "43318.34",
+             "руб."]
+    }
 
 
-def test_sort_processed_array_normal():
-    pass
+def test_sort_processed_array_normal(testing_processed_array):
+    assert utils.sort_processed_array(testing_processed_array) == \
+           {
+               "2018-06-30T02:08:58.425572":
+                   ["Перевод организации", "Счет 75106830613657916952", "Счет 11776614605963066702", "9824.07", "USD"],
+               "2019-03-23T01:09:46.296404":
+                   ["Перевод со счета на счет", "Счет 44812258784861134719", "Счет 74489636417521191160", "43318.34",
+                    "руб."],
+               "2019-07-03T18:35:29.512364":
+                   ["Перевод организации", "MasterCard 7158300734726758", "MasterCard 7158300734726758", "8221.37",
+                    "USD"],
+               "2019-08-26T10:50:58.294041":
+                   ["Перевод организации", "Maestro 1596837868705199", "Счет 64686473678894779589", "31957.58", "руб."],
+           }
 
 
-def test_sort_processed_array_sequence():
-    pass
+def test_sort_processed_array_sequence_check(testing_processed_array):
+    array = testing_processed_array
+    array["2022-08-26T10:50:58.294041"] = ["some data"]
+    array["2023-08-26T10:50:58.294041"] = ["some data"]
+    assert utils.sort_processed_array(array) == \
+           {
+               "2018-06-30T02:08:58.425572":
+                   ["Перевод организации", "Счет 75106830613657916952", "Счет 11776614605963066702", "9824.07", "USD"],
+               "2019-03-23T01:09:46.296404":
+                   ["Перевод со счета на счет", "Счет 44812258784861134719", "Счет 74489636417521191160", "43318.34",
+                    "руб."],
+               "2019-07-03T18:35:29.512364":
+                   ["Перевод организации", "MasterCard 7158300734726758", "MasterCard 7158300734726758", "8221.37",
+                    "USD"],
+               "2019-08-26T10:50:58.294041":
+                   ["Перевод организации", "Maestro 1596837868705199", "Счет 64686473678894779589", "31957.58", "руб."],
+               "2022-08-26T10:50:58.294041":
+                   ["some data"],
+               "2023-08-26T10:50:58.294041":
+                   ["some data"]
+           }
 
 
-def test_get_last_elements_normal():
-    pass
+def test_get_last_elements_one_element(testing_processed_array):
+    assert utils.get_last_elements(testing_processed_array, 1) == \
+           [
+               ("2019-08-26T10:50:58.294041",
+                ["Перевод организации", "Maestro 1596837868705199",
+                 "Счет 64686473678894779589", "31957.58", "руб."])
+           ]
+
+
+def test_get_last_elements_two_elements(testing_processed_array):
+    assert utils.get_last_elements(testing_processed_array, 1) == \
+           [
+               ("2019-07-03T18:35:29.512364",
+                ["Перевод организации", "MasterCard 7158300734726758", "MasterCard 7158300734726758", "8221.37", "USD"]
+                ),
+               ("2019-08-26T10:50:58.294041",
+                ["Перевод организации", "Maestro 1596837868705199", "Счет 64686473678894779589", "31957.58", "руб."]
+                )
+           ]
 
 
 def test_convert_data_normal():
-    pass
+    assert utils.convert_data("2019-07-03T18:35:29.512364") == "03.07.2019"
+    assert utils.convert_data("2019-08-26T10:50:58.294041") == "26.08.2019"
 
 
 def test_hide_account_sender_normal():
-    pass
+    assert utils.hide_account_sender("Maestro 1596837868705199") == "Maestro 1596 83** **** 5199"
+    assert utils.hide_account_sender("Visa Gold 1596837868705199") == "Visa Gold 1596 83** **** 5199"
 
 
 def test_hide_account_recipient_normal():
-    pass
+    assert utils.hide_account_recipient("Счет 64686473678894779589") == "Счет **9589"
+    assert utils.hide_account_recipient("Visa Gold 1596837868705199") == "Visa Gold **5199"
 
 
 def test_print_results_normal():
-    pass
+    assert utils.print_results(
+        [
+            (
+                "2019-07-03T18:35:29.512364",
+                ["Перевод организации", "MasterCard 7158300734726758", "MasterCard 7158300734726758", "8221.37", "USD"]
+            ),
+            ("2019-08-26T10:50:58.294041",
+             ["Перевод организации", "Maestro 1596837868705199", "Счет 64686473678894779589", "31957.58", "руб."]
+             )
+        ]
+    ) == \
+           """
+           03.07.2019 Перевод организации
+           MasterCard 7158300734726758 -> MasterCard 7158300734726758
+           8221.37 USD
+           
+           26.08.2019 Перевод организации
+           Maestro 1596837868705199 -> Счет 64686473678894779589
+           31957.58 руб.
+           
+           """
