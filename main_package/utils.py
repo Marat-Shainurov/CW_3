@@ -70,7 +70,7 @@ def print_results(array: list):
     res = []
     for element in range(len(array)):
         res.extend([convert_data(array[element][0]), " ", array[element][1][0], "\n"])
-        res.extend([hide_account_sender(array[element][1][1]), " ", hide_account_recipient(array[element][1][2]), "\n"])
+        res.extend([hide_account_sender(array[element][1][1]), " -> ", hide_account_recipient(array[element][1][2]), "\n"])
         res.extend([array[element][1][3], " ", array[element][1][4], "\n"])
         res.append("\n")
     return res

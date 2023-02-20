@@ -53,4 +53,4 @@ class AccountsTransfers:
         """
         Repr метод.
         """
-        return f"Accountstransfers({self.path_to_data})"
+        return f"AccountsTransfers({self.path_to_data})"
