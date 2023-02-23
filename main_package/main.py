@@ -1,10 +1,10 @@
 from main_package.AccountsTransfers import AccountsTransfers
 from main_package import utils
 
-path_to_main_array = "https://file.notion.so/f/s/d22c7143-d55e-4f1d-aa98-e9b15e5e5efc/operations.json?" \
-                     "spaceId=0771f0bb-b4cb-4a14-bc05-94cbd33fc70d&table=block&id=f11058ed-10ad-42ea-a13d" \
-                     "-aad1945e5421&expirationTimestamp=1676925013837&signature=RGD4LadituT7dPA_IDEm04fzqEHG" \
-                     "EF7fad0KstAigdM&downloadName=operations.json"
+path_to_main_array = "https://file.notion.so/f/s/d22c7143-d55e-4f1d-aa98-e9b15e5e5efc/operations.json?spaceId=" \
+                     "0771f0bb-b4cb-4a14-bc05-94cbd33fc70d&table=block&id=f11058ed-10ad-42ea-a13d-" \
+                     "aad1945e5421&expirationTimestamp=1677253225716&signature=" \
+                     "cPiw52cHRncnz3IIC54vAxqR6VeGtPtpR0i1TYv9h9U&downloadName=operations.json"
 
 # Создаем экземпляр класса, по основной ссылке.
 example_main = AccountsTransfers(path_to_main_array)
